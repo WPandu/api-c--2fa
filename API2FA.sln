@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API2FA", "API2FA\API2FA.csproj", "{017A7C28-6DDE-4191-AA07-D283E5288222}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{017A7C28-6DDE-4191-AA07-D283E5288222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{017A7C28-6DDE-4191-AA07-D283E5288222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{017A7C28-6DDE-4191-AA07-D283E5288222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{017A7C28-6DDE-4191-AA07-D283E5288222}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A065E9FE-0CEF-48DD-B35D-AF29FFA3551B}
+	EndGlobalSection
+EndGlobal
