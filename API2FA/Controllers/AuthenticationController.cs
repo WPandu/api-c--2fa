@@ -1,21 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using API2FA.Requests;
 using System;
 using System.Linq;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 
 namespace API2FA.Controllers
 {
-    public class AuthenticationController : Controller
+    [ApiController]
+    [Route("auth")]
+    public class AuthenticationController : ControllerBase
     {
-        [HttpPost("accesstoken", Name = "login")]
-        public IActionResult Login([FromBody] Authentication auth)
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
             try
             {
-                return Ok(_userService.Login(auth));
+                return Ok();
             }
             catch (Exception e)
             {

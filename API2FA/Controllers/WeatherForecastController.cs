@@ -1,3 +1,4 @@
+using API2FA.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API2FA.Controllers

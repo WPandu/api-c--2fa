@@ -1,4 +1,4 @@
-namespace API2FA
+namespace API2FA.Models
 {
     public class WeatherForecast
     {
