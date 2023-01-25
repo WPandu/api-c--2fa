@@ -36,6 +36,7 @@ namespace API2FA
             });
             services.AddScoped<TokenManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IUserService, UserService>();
 
             JwtBearerOptions options(JwtBearerOptions jwtBearerOptions, string audience)
             {

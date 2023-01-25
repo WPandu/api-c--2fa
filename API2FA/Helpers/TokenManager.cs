@@ -12,7 +12,7 @@
 
     public class TokenManager
     {
-        public static readonly string _secret = "Nu0qMql2ueGdf81YfaiU2izDdDESV9XvTIwYroexooHtkdVgqTlpN07QPMtQktcd";
+        public static readonly string _secret = "secret";
         public static readonly string _issuer = "JWTIssuer";
 
         public string GenerateAccessToken(User user)

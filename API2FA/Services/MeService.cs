@@ -19,7 +19,7 @@ namespace API2FA.Services
 
         public User Me()
         {
-            
+            return null;
         }
     }
 }
