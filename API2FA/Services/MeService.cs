@@ -9,17 +9,18 @@ namespace API2FA.Services
     public class MeService : IMeService
     {
         private DataContext _context;
-        private TokenManager _tokenManager;
+        private HttpContext _httpContext;
 
-        public MeService(DataContext context, TokenManager tokenManager)
+        public MeService(DataContext context, HttpContext httpContext)
         {
             _context = context;
-            _tokenManager = tokenManager;
+            _httpContext = httpContext;
         }
 
         public User Me()
         {
-            return null;
+            IUserService userService = new UserService(_context);
+            return userService.GetById(_httpContext.Items["UserID"].ToString());
         }
     }
 }

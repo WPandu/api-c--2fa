@@ -61,11 +61,11 @@
                     .Decode<IDictionary<string, object>>(token);
         }
 
-        public string? ValidateToken(string token)
+        public string ValidateToken(string token)
         {
             if (token == null)
             {
-                return null;
+                throw new System.UnauthorizedAccessException("Unauthorized");
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -90,8 +90,7 @@
             }
             catch
             {
-                // return null if validation fails
-                return null;
+                throw new System.UnauthorizedAccessException("Unauthorized");
             }
         }
     }

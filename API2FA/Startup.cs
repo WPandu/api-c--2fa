@@ -9,6 +9,7 @@ using API2FA.Helpers;
 using System.Text.Json.Serialization;
 using API2FA.Middlewares;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.OpenApi.Models;
 
 namespace API2FA
 {
@@ -35,6 +36,7 @@ namespace API2FA
                 x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
             services.AddScoped<TokenManager>();
+            services.AddScoped<HttpContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IUserService, UserService>();
 
@@ -78,7 +80,15 @@ namespace API2FA
             .AddJwtBearer("refresh", jwtBearerOptions => options(jwtBearerOptions, "refresh"));
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options => {
+                options.AddSecurityDefinition("Authorization", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Description = "Authorization for Bearer Token",
+                    Type = SecuritySchemeType.ApiKey
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,12 +108,12 @@ namespace API2FA
 
             app.UseAuthorization();
 
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+
             app.MapWhen(
                 httpContext => !httpContext.Request.Path.StartsWithSegments("/auth/login"),
                 subApp => subApp.UseMiddleware<JWTMiddleware>()
             );
-
-            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

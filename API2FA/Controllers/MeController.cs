@@ -20,7 +20,7 @@ namespace API2FA.Controllers
         }
 
         [HttpGet]
-        public IActionResult me()
+        public IActionResult Me([From])
         {
             return Ok(_meService.Me());
         }
