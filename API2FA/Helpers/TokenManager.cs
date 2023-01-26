@@ -9,56 +9,35 @@
     using System.Text;
     using Microsoft.IdentityModel.Tokens;
     using System.IdentityModel.Tokens.Jwt;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
+    using System.Security.Claims;
+    using System.Security.Principal;
 
     public class TokenManager
     {
-        public static readonly string _secret = "secret";
+        public static readonly string _secret = "401b09eab3c013d4ca54922bb802bec8fd5318192b0a75f201d8b3727429090fb337591abd3e44453b954555b7a0812e1081c39b740293f765eae731f5a65ed1";
         public static readonly string _issuer = "JWTIssuer";
+        public static readonly string _audience = "JWTAudience";
 
         public string GenerateAccessToken(User user)
         {
-            return new JwtBuilder()
-                .WithAlgorithm(new HMACSHA256Algorithm())
-                .WithSecret(Encoding.ASCII.GetBytes(_secret))
-                .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(30).ToUnixTimeSeconds())
-                .AddClaim("id", user.ID)
-                .AddClaim("email", user.Email)
-                .Issuer(_issuer)
-                .Audience("access")
-                .Encode();
-        }
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        public (string refreshToken, string jwt) GenerateRefreshToken(User user)
-        {
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                Convert.ToBase64String(randomNumber);
-            }
+            var secToken = new JwtSecurityToken(
+                signingCredentials: credentials,
+                issuer: _issuer,
+                audience: _audience,
+                claims: new[]
+                {
+                    new Claim("id", user.ID.ToString()),
+                    new Claim("email", user.Email),
+                    new Claim("exp", DateTimeOffset.UtcNow.AddDays(1).ToUnixTimeSeconds().ToString())
 
-            var randomString = System.Text.Encoding.ASCII.GetString(randomNumber);
-
-            string jwt = new JwtBuilder()
-                .WithAlgorithm(new HMACSHA256Algorithm())
-                .WithSecret(_secret)
-                .AddClaim("exp", DateTimeOffset.UtcNow.AddHours(4).ToUnixTimeSeconds())
-                .AddClaim("refresh", randomString)
-                .AddClaim("id", user.ID)
-                .AddClaim("email", user.Email)
-                .Issuer(_issuer)
-                .Audience("refresh")
-                .Encode();
-
-            return (randomString, jwt);
-        }
-
-        public IDictionary<string, object> VerifyToken(string token)
-        {
-            return new JwtBuilder()
-                    .WithSecret(_secret)
-                    .MustVerifySignature()
-                    .Decode<IDictionary<string, object>>(token);
+                },
+                expires: DateTime.UtcNow.AddDays(1));
+            var handler = new JwtSecurityTokenHandler();
+            return handler.WriteToken(secToken);
         }
 
         public string ValidateToken(string token)
@@ -68,30 +47,39 @@
                 throw new System.UnauthorizedAccessException("Unauthorized");
             }
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_secret);
+            if (token.Contains(" ")) {
+                token = token.Split(" ").Last();
+            }
+
             try
             {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_secret)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true, //validate the expiration and not before values in the token
-                    ClockSkew = TimeSpan.FromMinutes(1) //1 minute tolerance for the expiration date
-                }, out SecurityToken validatedToken);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var validationParameters = GetValidationParameters();
+                SecurityToken validatedToken;
+                tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userID = jwtToken.Claims.First(x => x.Type == "id").Value;
 
-                // return user id from JWT token if validation successful
                 return userID;
             }
             catch
             {
                 throw new System.UnauthorizedAccessException("Unauthorized");
             }
+        }
+
+        private static TokenValidationParameters GetValidationParameters()
+        {
+            return new TokenValidationParameters()
+            {
+                ValidateLifetime = false, // Because there is no expiration in the generated token
+                ValidateAudience = false, // Because there is no audiance in the generated token
+                ValidateIssuer = false,   // Because there is no issuer in the generated token
+                ValidIssuer = _issuer,
+                ValidAudience = _audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secret)) // The same key as the one that generate the token
+            };
         }
     }
 }

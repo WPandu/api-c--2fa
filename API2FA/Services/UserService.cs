@@ -15,7 +15,7 @@ namespace API2FA.Services
             _context = context;
         }
 
-        public User GetById(string id) 
+        public User GetById(Guid id) 
         {
             var user = _context.Users.Find(id);
             if (user == null) throw new KeyNotFoundException("User not found");

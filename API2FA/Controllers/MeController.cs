@@ -13,16 +13,11 @@ namespace API2FA.Controllers
     [Route("me")]
     public class MeController : ControllerBase
     {
-        private IMeService _meService;
-
-        public MeController(IMeService MeService) {
-            _meService = MeService;
-        }
 
         [HttpGet]
-        public IActionResult Me([From])
+        public IActionResult Me()
         {
-            return Ok(_meService.Me());
+            return Ok(HttpContext.Items["User"]);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace API2FA.Requests
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace API2FA.Requests
 {
     public class LoginRequest
     {

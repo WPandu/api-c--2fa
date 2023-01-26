@@ -10,6 +10,8 @@ using System.Text.Json.Serialization;
 using API2FA.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace API2FA
 {
@@ -25,6 +27,7 @@ namespace API2FA
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddDbContext<DataContext>();
             services.AddScoped<DbInitializer>();
             services.AddControllers().AddJsonOptions(x =>
@@ -36,59 +39,12 @@ namespace API2FA
                 x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
             services.AddScoped<TokenManager>();
-            services.AddScoped<HttpContext>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IMeService, MeService>();
             services.AddScoped<IUserService, UserService>();
 
-            JwtBearerOptions options(JwtBearerOptions jwtBearerOptions, string audience)
-            {
-                jwtBearerOptions.RequireHttpsMetadata = false;
-                jwtBearerOptions.SaveToken = true;
-                jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(TokenManager._secret)),
-                    ValidIssuer = TokenManager._issuer,
-                    ValidateAudience = true,
-                    ValidAudience = audience,
-                    ValidateLifetime = true, //validate the expiration and not before values in the token
-                    ClockSkew = TimeSpan.FromMinutes(1) //1 minute tolerance for the expiration date
-                };
-                if (audience == "access")
-                {
-                    jwtBearerOptions.Events = new JwtBearerEvents
-                    {
-                        OnAuthenticationFailed = context =>
-                        {
-                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                            {
-                                context.Response.Headers.Add("Token-Expired", "true");
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
-                }
-                return jwtBearerOptions;
-            }
-
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(jwtBearerOptions => options(jwtBearerOptions, "access"))
-            .AddJwtBearer("refresh", jwtBearerOptions => options(jwtBearerOptions, "refresh"));
-
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(options => {
-                options.AddSecurityDefinition("Authorization", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Description = "Authorization for Bearer Token",
-                    Type = SecuritySchemeType.ApiKey
-                });
-            });
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,13 +63,14 @@ namespace API2FA
             app.UseRouting();
 
             app.UseAuthorization();
-
             app.UseMiddleware<ErrorHandlerMiddleware>();
-
+            app.UseMiddleware<JWTMiddleware>();
+            /*
             app.MapWhen(
                 httpContext => !httpContext.Request.Path.StartsWithSegments("/auth/login"),
                 subApp => subApp.UseMiddleware<JWTMiddleware>()
             );
+            */
 
             app.UseEndpoints(endpoints =>
             {

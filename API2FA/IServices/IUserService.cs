@@ -6,6 +6,6 @@ namespace API2FA.IServices
 {
     public interface IUserService
     {
-        User GetById(string id);
+        User GetById(Guid id);
     }
 }

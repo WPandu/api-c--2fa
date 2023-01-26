@@ -31,13 +31,11 @@ namespace API2FA.Services
                 throw new System.UnauthorizedAccessException("Email or password incorrect");
             }
 
-            var refreshToken = _tokenManager.GenerateRefreshToken(user);
             var accessToken = _tokenManager.GenerateAccessToken(user);
 
             return new LoginResponse
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken.jwt
             };
         }
     }
