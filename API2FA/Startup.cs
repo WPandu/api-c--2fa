@@ -40,7 +40,6 @@ namespace API2FA
             });
             services.AddScoped<TokenManager>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IMeService, MeService>();
             services.AddScoped<IUserService, UserService>();
 
             services.AddEndpointsApiExplorer();
@@ -71,6 +70,7 @@ namespace API2FA
                 subApp => subApp.UseMiddleware<JWTMiddleware>()
             );
             */
+            
 
             app.UseEndpoints(endpoints =>
             {

@@ -16,6 +16,12 @@
 
         public async Task Invoke(HttpContext context, IUserService userService, TokenManager tokenManager)
         {
+            var path = context.Request.Path.Value;
+            if (path == "/auth/login")
+            {
+                await _next(context);
+                return;
+            }
             context.Request.Headers.TryGetValue("Authorization", out StringValues authorizationHeader);
             var token = authorizationHeader.ToString().Split(" ").Last();
             if (token == null) {

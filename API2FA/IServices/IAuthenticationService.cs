@@ -7,5 +7,6 @@ namespace API2FA.IServices
     public interface IAuthenticationService
     {
         LoginResponse Login(LoginRequest loginRequest);
+        GoogleQrCodeResponse GoogleQrCode(User? user);
     }
 }

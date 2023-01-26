@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using API2FA.Responses;
 
 namespace API2FA.Controllers
 {
@@ -17,7 +18,10 @@ namespace API2FA.Controllers
         [HttpGet]
         public IActionResult Me()
         {
-            return Ok(HttpContext.Items["User"]);
+            return Ok(new SuccessResponse
+            {
+                Data = HttpContext.Items["User"]
+            });
         }
     }
 }

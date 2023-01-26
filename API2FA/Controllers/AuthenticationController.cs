@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using API2FA.Requests;
+using API2FA.Models;
 using API2FA.IServices;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using API2FA.Responses;
 
 namespace API2FA.Controllers
 {
@@ -22,7 +24,21 @@ namespace API2FA.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
-            return Ok(_authenticationService.Login(loginRequest));
+            
+            return Ok(new SuccessResponse
+            {
+                Data = _authenticationService.Login(loginRequest),
+            });
+        }
+
+        [HttpGet("google-qr-code")]
+        public IActionResult GoogleQrCode()
+        {
+            var user = (User?)HttpContext.Items["User"];
+            return Ok(new SuccessResponse
+            {
+                Data = _authenticationService.GoogleQrCode(user)
+            });
         }
     }
 }

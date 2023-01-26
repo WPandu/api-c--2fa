@@ -10,15 +10,8 @@ namespace API2FA.Seeders
 
             using var scope = app.ApplicationServices.CreateScope();
             var services = scope.ServiceProvider;
-            try
-            {
-                var context = services.GetRequiredService<DataContext>();
-                DbInitializer.Initialize(context);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            var context = services.GetRequiredService<DataContext>();
+            DbInitializer.Initialize(context);
 
             return app;
         }
