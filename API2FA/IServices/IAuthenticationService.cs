@@ -8,5 +8,6 @@ namespace API2FA.IServices
     {
         LoginResponse Login(LoginRequest loginRequest);
         GoogleQrCodeResponse GoogleQrCode(User? user);
+        void RegisterGoogleQrCode(Guid userID, RegisterGoogleQrCodeRequest registerGoogleQrCodeRequest);
     }
 }

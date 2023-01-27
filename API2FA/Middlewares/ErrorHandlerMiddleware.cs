@@ -33,6 +33,9 @@
                     case KeyNotFoundException:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
+                    case ApplicationException:
+                        response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+                        break;
                     default:
                         // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;

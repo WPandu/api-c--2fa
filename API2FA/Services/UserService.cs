@@ -3,6 +3,7 @@ using API2FA.Models;
 using API2FA.Requests;
 using API2FA.Responses;
 using API2FA.IServices;
+using Microsoft.AspNetCore.Session;
 
 namespace API2FA.Services
 {

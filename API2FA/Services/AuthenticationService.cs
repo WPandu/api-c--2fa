@@ -4,6 +4,9 @@ using API2FA.Requests;
 using API2FA.Responses;
 using API2FA.IServices;
 using Google.Authenticator;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace API2FA.Services
 {
@@ -32,6 +35,21 @@ namespace API2FA.Services
                 throw new System.UnauthorizedAccessException("Email or password incorrect");
             }
 
+            if (user.Google2faSecret != null && String.IsNullOrEmpty(loginRequest.OTP))
+            {
+                throw new System.ApplicationException("OTP is required");
+            }
+
+            if (user.Google2faSecret != null && !String.IsNullOrEmpty(loginRequest.OTP))
+            {
+                TwoFactorAuthenticator tfa = new TwoFactorAuthenticator();
+                var checkOTP = tfa.ValidateTwoFactorPIN(user.Google2faSecret, loginRequest.OTP, true);
+                if (!checkOTP)
+                {
+                    throw new System.ApplicationException("OTP invalid");
+                }
+            }
+
             var accessToken = _tokenManager.GenerateAccessToken(user);
 
             return new LoginResponse
@@ -55,6 +73,18 @@ namespace API2FA.Services
                 QrCode = qrCodeImageUrl,
                 SecretKey = secretKey
             };
+        }
+
+        public void RegisterGoogleQrCode(Guid userID, RegisterGoogleQrCodeRequest registerGoogleQrCodeRequest)
+        {
+            if (registerGoogleQrCodeRequest == null)
+            {
+                throw new System.ApplicationException("Google 2fa secret is required");
+            }
+            var user = _context.Users.Find(userID);
+            user.Google2faSecret = registerGoogleQrCodeRequest.Google2faSecret;
+            _context.Users.Update(user);
+            _context.SaveChanges();
         }
     }
 }

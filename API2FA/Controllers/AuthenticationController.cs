@@ -40,5 +40,16 @@ namespace API2FA.Controllers
                 Data = _authenticationService.GoogleQrCode(user)
             });
         }
+
+        [HttpPost("google-qr-code")]
+        public IActionResult RegisterGoogleQrCode(RegisterGoogleQrCodeRequest registerGoogleQrCodeRequest)
+        {
+            var user = (User?)HttpContext.Items["User"];
+            _authenticationService.RegisterGoogleQrCode(user.ID, registerGoogleQrCodeRequest);
+            return Ok(new SuccessResponse
+            {
+                Message = "Register Google QR Code Successfully"
+            });
+        }
     }
 }

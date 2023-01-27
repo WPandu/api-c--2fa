@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using API2FA.Responses;
+using API2FA.Models;
 
 namespace API2FA.Controllers
 {
@@ -14,13 +15,19 @@ namespace API2FA.Controllers
     [Route("me")]
     public class MeController : ControllerBase
     {
+        private IUserService _userService;
 
+        public MeController(IUserService userService)
+        {
+            _userService = userService;
+        }
         [HttpGet]
         public IActionResult Me()
         {
+            var user = (User?)HttpContext.Items["User"];
             return Ok(new SuccessResponse
             {
-                Data = HttpContext.Items["User"]
+                Data = _userService.GetById(user.ID)
             });
         }
     }
