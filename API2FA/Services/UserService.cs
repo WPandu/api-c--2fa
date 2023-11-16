@@ -1,15 +1,12 @@
 ﻿using API2FA.Helpers;
 using API2FA.Models;
-using API2FA.Requests;
-using API2FA.Responses;
 using API2FA.IServices;
-using Microsoft.AspNetCore.Session;
 
 namespace API2FA.Services
 {
     public class UserService : IUserService
     {
-        private DataContext _context;
+        private readonly DataContext _context;
 
         public UserService(DataContext context)
         {

@@ -2,11 +2,6 @@
 using API2FA.Requests;
 using API2FA.Models;
 using API2FA.IServices;
-using System;
-using System.Linq;
-using System.Security.Claims;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Authorization;
 using API2FA.Responses;
 
 namespace API2FA.Controllers
@@ -15,7 +10,7 @@ namespace API2FA.Controllers
     [Route("auth")]
     public class AuthenticationController : ControllerBase
     {
-        private IAuthenticationService _authenticationService;
+        private readonly IAuthenticationService _authenticationService;
 
         public AuthenticationController(IAuthenticationService authenticationService) {
             _authenticationService = authenticationService;
@@ -45,6 +40,10 @@ namespace API2FA.Controllers
         public IActionResult RegisterGoogleQrCode(RegisterGoogleQrCodeRequest registerGoogleQrCodeRequest)
         {
             var user = (User?)HttpContext.Items["User"];
+            if (user == null) 
+            {
+                throw new System.UnauthorizedAccessException();
+            }
             _authenticationService.RegisterGoogleQrCode(user.ID, registerGoogleQrCodeRequest);
             return Ok(new SuccessResponse
             {

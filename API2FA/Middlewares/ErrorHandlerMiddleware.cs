@@ -1,6 +1,5 @@
 ﻿namespace API2FA.Middlewares
 {
-    using Microsoft.AspNetCore.Mvc;
     using System.Net;
     using System.Text.Json;
 
@@ -33,7 +32,7 @@
                     case KeyNotFoundException:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
-                    case ApplicationException:
+                    case MissingFieldException:
                         response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
                         break;
                     default:

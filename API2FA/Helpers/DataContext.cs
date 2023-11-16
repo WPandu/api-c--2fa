@@ -2,7 +2,6 @@
 {
     using API2FA.Models;
     using Microsoft.EntityFrameworkCore;
-    using System.Collections.Generic;
 
     public class DataContext : DbContext
     {

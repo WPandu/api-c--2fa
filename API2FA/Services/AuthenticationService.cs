@@ -4,16 +4,13 @@ using API2FA.Requests;
 using API2FA.Responses;
 using API2FA.IServices;
 using Google.Authenticator;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace API2FA.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private DataContext _context;
-        private TokenManager _tokenManager;
+        private readonly DataContext _context;
+        private readonly TokenManager _tokenManager;
 
         public AuthenticationService(DataContext context, TokenManager tokenManager)
         {
@@ -37,7 +34,7 @@ namespace API2FA.Services
 
             if (user.Google2faSecret != null && String.IsNullOrEmpty(loginRequest.OTP))
             {
-                throw new System.ApplicationException("OTP is required");
+                throw new System.MissingFieldException("OTP is required");
             }
 
             if (user.Google2faSecret != null && !String.IsNullOrEmpty(loginRequest.OTP))
@@ -46,7 +43,7 @@ namespace API2FA.Services
                 var checkOTP = tfa.ValidateTwoFactorPIN(user.Google2faSecret, loginRequest.OTP, true);
                 if (!checkOTP)
                 {
-                    throw new System.ApplicationException("OTP invalid");
+                    throw new System.MissingFieldException("OTP invalid");
                 }
             }
 
@@ -79,9 +76,13 @@ namespace API2FA.Services
         {
             if (registerGoogleQrCodeRequest == null)
             {
-                throw new System.ApplicationException("Google 2fa secret is required");
+                throw new System.MissingFieldException("Google 2fa secret is required");
             }
             var user = _context.Users.Find(userID);
+            if (user == null) 
+            {
+                throw new System.UnauthorizedAccessException();
+            }
             user.Google2faSecret = registerGoogleQrCodeRequest.Google2faSecret;
             _context.Users.Update(user);
             _context.SaveChanges();

@@ -1,10 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
-using System.Text.Json.Serialization;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using Newtonsoft.Json;
 using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
 namespace API2FA.Models

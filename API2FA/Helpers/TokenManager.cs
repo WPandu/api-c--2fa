@@ -1,17 +1,11 @@
 ﻿namespace API2FA.Helpers
 {
-    using System.Security.Cryptography;
     using System;
-    using System.Collections.Generic;
     using API2FA.Models;
-    using JWT.Builder;
-    using JWT.Algorithms;
     using System.Text;
     using Microsoft.IdentityModel.Tokens;
     using System.IdentityModel.Tokens.Jwt;
-    using Microsoft.EntityFrameworkCore.Metadata.Internal;
     using System.Security.Claims;
-    using System.Security.Principal;
 
     public class TokenManager
     {

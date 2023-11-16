@@ -1,0 +1,954 @@
+{
+	"info": {
+		"_postman_id": "14808e09-0e9a-4cc0-832d-32c5d6ab5a25",
+		"name": "2FA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3573052"
+	},
+	"item": [
+		{
+			"name": "Lumen",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = JSON.parse(responseBody);\r",
+											"postman.setEnvironmentVariable(\"token\", data.data.access_token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"email\":\"admin@only.test\",\r\n\t\"password\":\"password\",\r\n    \"recaptcha\": null,\r\n    \"otp\": \"361307\"\r\n}"
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/login",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/logout",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Email Reset Password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"admin@only.test\"\r\n}"
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/password/email",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"password",
+										"email"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Password",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" : \"admin@only.test\",\r\n    \"token\" : \"zVMmkuyzw7unAI57jJ8ZdNb0jygAyKyh\",\r\n    \"password\" : \"Admin123\",\r\n    \"password_confirmation\" : \"Admin123\"\r\n}"
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/password/reset",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"password",
+										"reset"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Recaptcha",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/recaptcha",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"recaptcha"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2FA",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/2fa",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"2fa"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Barcode Google",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/google-barcode",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"google-barcode"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register Barcode Google",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"google2fa_secret\": \"BFMSTPRFE2473CT44AL3J4BEQM6BCC4Z\"\r\n}"
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/auth/google-barcode",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"auth",
+										"google-barcode"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Role",
+					"item": [
+						{
+							"name": "Get List",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/roles",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/roles/:id",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"roles",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "6bb97700-27b9-471b-bdfe-ab1d88410869"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Me",
+					"item": [
+						{
+							"name": "Me",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/me",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deactivate",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/me/deactivate",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"me",
+										"deactivate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Password",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"old_password\": \"Admin123\",\r\n\t\"password\": \"Admin123\",\r\n\t\"password_confirmation\": \"Admin123\"\r\n}"
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/me/change-password",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"me",
+										"change-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Profile",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Lorem Ipsum\",\r\n    \"phone\": \"081234567891\",\r\n\t\"about_me\": \"Lorem Ipsum\",\r\n\t\"skills\": [\r\n        \"Skill 1\",\r\n        \"Skill 2\"\r\n    ],\r\n\t\"printer_tools\": [\r\n        \"3b561aee-b6bf-4a24-983b-2fea2d386dcc\"\r\n    ],\r\n    \"software_tools\": [\r\n        \"Software 1\",\r\n        \"Software 2\"\r\n    ]\r\n}"
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/me/change-profile",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"me",
+										"change-profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Photo",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"photo\": \"data:image/png;base64,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\"\r\n}"
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/me/change-photo",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"me",
+										"change-photo"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Get List",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/users",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "is_contributor",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "name",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "email",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "is_active",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "role_status",
+											"value": "pending",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Detail",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-lumen-2fa}}/users/:id",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "ba591aae-62f6-4e0a-8f28-571646f444c2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Lorem Ipsum\",\n    \"email\": \"lorem.ipsum2@only.test\",\n    \"password\": \"Test1234\",\n    \"password_confirmation\": \"Test1234\",\n    \"is_active\": 1,\n    \"role_ids\": [\"6bb97700-27b9-471b-bdfe-ab1d88410869\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/users",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register (For Web)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Lorem Ipsum\",\n    \"email\": \"pandutestemail@yopmail.com\",\n    \"phone\": \"081282833322\",\n    \"address\": \"Test Address\",\n    \"password\": \"Test1234\",\n    \"password_confirmation\": \"Test1234\",\n    \"role_ids\": [\"3c241ab5-4887-44fc-b769-47f6cd285a2f\", \"c943fa30-8390-43de-b2f7-f823405bde91\"],\n    \"recaptcha\": \"03AGdBq24zl2GFED7_k_gBVwfdDCF94gqCq-myseH-EKbf0i3eVIsLjtBEtEBr8dCJwo8yG9e6e4sYU1S6mb4RCICQWf5UigFKGsfXEuOOI6EDi181x1UnhKjrfMv2Y203t2cveAdAvMCUO_fV-OwbYx5YcspOeOqkTZC8gtV6CoyoKCDcWGhXGVys8FbtiNBGgSGcp1coWdJjyT9GHdwg0mssv59x7qEW1-8C2fFcMgHY53bic95pRf5hk9byMn4-yvVRYn2etZzGzqDpCtycmIjvIcAlmxEGyJ4koVmy5G8ArX0XgeLaBXwX9F91mOFNZIFiGlrgXAtZaTQqvn-vCSTeT8XYm1F91z8IN6FbvbsQy1wEU_-crgXZr6xIoX9aFO0T0yB3F6YQcapWSULQR1pKfp2Hz-AVcg\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/users/registers",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"users",
+										"registers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Activation (For Web)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"lorem.ipsum4@only.test\",\n    \"activation_token\": \"7yw3XvSuhEJ1AO4hlwEebnc6uk2hYTU8\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/users/activations",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"users",
+										"activations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Lorem Ipsum\",\n    \"email\": \"lorem.ipsum2@only.test\",\n    \"password\": \"Test1234\",\n    \"password_confirmation\": \"Test1234\",\n    \"is_active\": 1,\n    \"role_ids\": [\"6bb97700-27b9-471b-bdfe-ab1d88410869\"]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/users/:id",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "2f8202e0-7bbf-427d-ba39-1285cc50ccb6"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Approval",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"answer\": \"rejected\",\r\n    \"role_id\": \"c943fa30-8390-43de-b2f7-f823405bde91\",\r\n    \"reject_reason\": \"lorem ipsum\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-lumen-2fa}}/users/:id/approvals",
+									"host": [
+										"{{api-lumen-2fa}}"
+									],
+									"path": [
+										"users",
+										":id",
+										"approvals"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "138dd442-16ae-454c-a836-5350241a948c"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "C# Net Core 6",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", data.data.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"email\":\"test@mailinator.com\",\r\n\t\"password\":\"password\",\r\n    \"otp\": null\r\n}"
+						},
+						"url": {
+							"raw": "{{api-c#-2fa}}/auth/login",
+							"host": [
+								"{{api-c#-2fa}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-c#-2fa}}/me",
+							"host": [
+								"{{api-c#-2fa}}"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get qr code Google",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{api-c#-2fa}}/auth/google-qr-code",
+							"host": [
+								"{{api-c#-2fa}}"
+							],
+							"path": [
+								"auth",
+								"google-qr-code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register qr code Google",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"google_2fa_secret\": \"MI4DSOBZHAYDSZLF\"\r\n}"
+						},
+						"url": {
+							"raw": "{{api-c#-2fa}}/auth/google-qr-code",
+							"host": [
+								"{{api-c#-2fa}}"
+							],
+							"path": [
+								"auth",
+								"google-qr-code"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
