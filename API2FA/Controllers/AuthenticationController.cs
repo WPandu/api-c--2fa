@@ -26,7 +26,7 @@ namespace API2FA.Controllers
             });
         }
 
-        [HttpGet("google-qr-code")]
+        [HttpGet("2fa-qr-code")]
         public IActionResult GoogleQrCode()
         {
             var user = (User?)HttpContext.Items["User"];
@@ -36,7 +36,7 @@ namespace API2FA.Controllers
             });
         }
 
-        [HttpPost("google-qr-code")]
+        [HttpPost("2fa-qr-code")]
         public IActionResult RegisterGoogleQrCode(RegisterGoogleQrCodeRequest registerGoogleQrCodeRequest)
         {
             var user = (User?)HttpContext.Items["User"];
